@@ -18,3 +18,5 @@ local.properties
 .idea/vcs.xml
 .idea/gradle.xml
 .idea/markdown.xml
+*.jks
+*.keystore

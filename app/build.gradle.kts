@@ -20,6 +20,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // No signingConfig configured for Release.
+    // This ensures that the build output is strictly UNSIGNED.
+    // Signing will be handled in a separate step/department.
+
     buildTypes {
         release {
             isMinifyEnabled = false
