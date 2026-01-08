@@ -15,15 +15,13 @@ android {
         minSdk = 24
         targetSdk = 36
         
-        // --- Version Config ---
-        
-        // VersionName: Fixed as requested
+        // --- Version Config (Corrected) ---
+
+        // versionName: The version name displayed to users. (e.g., "1.0.0")
         versionName = "1.0.0"
 
-        // VersionCode: Time-based
-        // Note: Android versionCode is a 32-bit integer (max 2,147,483,647).
-        // YYYYMMDDHHMMSS is too large, so we use Unix Timestamp (seconds since 1970).
-        // This ensures the code increases with time and fits in the integer limit.
+        // versionCode: A positive integer used internally by Google Play to determine whether one version is more recent than another.
+        // We use a timestamp to ensure it always increases with each build.
         versionCode = (System.currentTimeMillis() / 1000).toInt()
         
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -53,6 +51,7 @@ android {
         compose = true
     }
 }
+
 
 dependencies {
     implementation(libs.androidx.core.ktx)
