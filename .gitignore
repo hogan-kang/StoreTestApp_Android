@@ -17,3 +17,4 @@ local.properties
 .idea/misc.xml
 .idea/vcs.xml
 .idea/gradle.xml
+.idea/markdown.xml
