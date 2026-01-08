@@ -1,0 +1,43 @@
+=== Google Play Store Listing Info ===
+
+【App Name / 应用名称】
+StoreTestApp
+
+【Short Description / 简短描述】(Max 80 chars)
+A sample application demonstrating automated CI/CD deployment to Google Play.
+
+【Full Description / 完整描述】(Max 4000 chars)
+StoreTestApp is a demonstration project designed to showcase the complete workflow of modern Android development and deployment.
+
+Key Features:
+- Built with Kotlin and Jetpack Compose.
+- Material 3 Design implementation.
+- Automated Build & Signing using GitHub Actions.
+- Continuous Deployment to Google Play Console.
+
+This app serves as a reference implementation for developers looking to set up their own automated release pipelines.
+
+=========================================
+
+【Graphic Assets Requirements / 图片素材要求】
+(你必须准备以下图片才能发布)
+
+1. App Icon (应用图标)
+   - Size: 512 x 512 px
+   - Format: PNG (32-bit)
+   - Max size: 1 MB
+   - Tip: 可以直接用你项目里的 mipmap-xxxhdpi/ic_launcher.png (虽然小了点，但临时凑合)，建议找个在线工具生成一个 512 的。
+
+2. Feature Graphic (置顶大图)
+   - Size: 1024 x 500 px
+   - Format: JPEG or 24-bit PNG (no alpha)
+   - Tip: 这是商店详情页最顶部的横幅图。如果没有设计，可以用 PPT 做一个纯色背景，写上 "StoreTestApp" 居中截图即可。
+
+3. Phone Screenshots (手机截图)
+   - Count: At least 2 screenshots
+   - Ratio: 16:9 or 9:16 (Portrait)
+   - Tip: 既然你已经能在模拟器跑了，打开应用，按模拟器侧边的 "照相机" 按钮截图 2 张即可。
+
+=========================================
+【Privacy Policy / 隐私政策】
+如果你只是测试，没有隐私政策 URL，可以暂时在 Console 里选择 "Not submitting a privacy policy at this time" (如果允许)，或者使用免费的隐私政策生成器生成一个 GitHub Pages 链接。

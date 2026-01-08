@@ -14,9 +14,18 @@ android {
         applicationId = "com.hogan.kang.storetest"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        
+        // --- Version Config ---
+        
+        // VersionName: Fixed as requested
+        versionName = "1.0.0"
 
+        // VersionCode: Time-based
+        // Note: Android versionCode is a 32-bit integer (max 2,147,483,647).
+        // YYYYMMDDHHMMSS is too large, so we use Unix Timestamp (seconds since 1970).
+        // This ensures the code increases with time and fits in the integer limit.
+        versionCode = (System.currentTimeMillis() / 1000).toInt()
+        
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
