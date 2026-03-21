@@ -78,7 +78,7 @@ jobs:
             --aab "app/build/outputs/bundle/release/app-release-signed.aab" \
             --track "internal" \
             --release_status "draft" \
-            --replace_draft true \
+            --clear_previous_drafts true \
             --release_notes "$RELEASE_NOTES" \
             --skip_upload_apk true \
             --skip_upload_metadata true \
