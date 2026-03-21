@@ -57,28 +57,33 @@ jobs:
           name: app-release-signed-aab
           path: app/build/outputs/bundle/release/*-signed.aab
 
-      # Upload to Google Play Store using Fastlane Supply CLI (No Fastfile/Appfile needed)
+      # Upload to Google Play Store using Fastlane Supply CLI
       - name: Upload to Play Store with Fastlane
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
         run: |
-          # Create temporary service account file
+          # 1. Create temporary service account file
           echo "$SERVICE_ACCOUNT_JSON" > service_account.json
           
-          # Run fastlane supply directly with arguments
-          # Fixed: --status changed to --release_status
+          # 2. Generate Release Notes with current timestamp
+          TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
+          RELEASE_NOTES="{\"en-US\": \"Automated release at $TIMESTAMP\"}"
+          
+          # 3. Run fastlane supply
+          # Removed --skip_upload_changelogs to allow release notes
           fastlane supply \
             --package_name "com.hogan.kang.storetest" \
             --json_key "service_account.json" \
             --aab "app/build/outputs/bundle/release/app-release-signed.aab" \
             --track "internal" \
             --release_status "draft" \
+            --replace_draft true \
+            --release_notes "$RELEASE_NOTES" \
             --skip_upload_apk true \
             --skip_upload_metadata true \
             --skip_upload_images true \
-            --skip_upload_changelogs true \
             --skip_upload_screenshots true
           
-          # Clean up
+          # 4. Clean up
           rm service_account.json
