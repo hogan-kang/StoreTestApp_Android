@@ -23,7 +23,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '3.2' # Upgrade Ruby version to 3.2+
           bundler-cache: true
 
       - name: Install Fastlane
@@ -67,13 +67,13 @@ jobs:
           echo "$SERVICE_ACCOUNT_JSON" > service_account.json
           
           # Run fastlane supply directly with arguments
-          # We use app-release-signed.aab as specified in our signing script
+          # Fixed: --status changed to --release_status
           fastlane supply \
             --package_name "com.hogan.kang.storetest" \
             --json_key "service_account.json" \
             --aab "app/build/outputs/bundle/release/app-release-signed.aab" \
             --track "internal" \
-            --status "draft" \
+            --release_status "draft" \
             --skip_upload_apk true \
             --skip_upload_metadata true \
             --skip_upload_images true \
