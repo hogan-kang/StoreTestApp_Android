@@ -6,7 +6,7 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  build-and-sign:
+  deploy-google-play-internal:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

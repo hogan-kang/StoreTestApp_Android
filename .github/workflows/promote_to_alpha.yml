@@ -27,7 +27,7 @@ on:
           - production
 
 jobs:
-  promote:
+  promote-to-alpha:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

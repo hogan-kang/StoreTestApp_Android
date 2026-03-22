@@ -18,12 +18,11 @@ platform :android do
     upload_to_play_store(
       # package_name is automatically read from Appfile
       json_key_data: ENV['SERVICE_ACCOUNT_JSON'],
-      version_code: version,        # Specify exactly which version code to promote
-      track: dest_track,           # Destination track
-      from_track: source_track,    # Source track
+      version_code: version,              # Specify exactly which version code to promote
       
-      # NOTE: If the destination track is "Under Review", this call may fail.
-      # It is recommended to enable "Managed Publishing" in Google Play Console.
+      # FIXED: Use available options from your fastlane version
+      track: source_track,                # Source track
+      track_promote_to: dest_track,       # Destination track
       
       # Ensure the destination track's release ONLY contains this promoted version
       version_codes_to_retain: [], 
@@ -31,13 +30,13 @@ platform :android do
       # Automatically deactivate the version in the source track after a successful promotion
       deactivate_on_promote: true,
 
-      skip_upload_aab: true,       # Do not upload a new binary
+      skip_upload_aab: true,             # Do not upload a new binary
       skip_upload_apk: true,
       skip_upload_metadata: true,
       skip_upload_changelogs: true, 
       skip_upload_images: true,
       skip_upload_screenshots: true,
-      # CHANGED: Use "draft" to allow manual review before rollout
+      # Use "draft" to allow manual review before rollout
       release_status: "draft"
     )
   end
