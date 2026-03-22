@@ -1,3 +1,1 @@
-# 不再指定固定的文件路径，让 Fastlane 自动寻找环境变量
-# json_key_file("service_account.json") 
 package_name("com.hogan.kang.storetest")

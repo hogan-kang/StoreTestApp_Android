@@ -1,3 +1,5 @@
+require 'fileutils'
+
 default_platform(:android)
 
 platform :android do
@@ -5,25 +7,40 @@ platform :android do
   lane :deploy do |options|
     timestamp = Time.now.strftime("%Y-%m-%d %H:%M:%S")
     
-    # 1. 动态创建更新说明
-    changelog_dir = "fastlane/metadata/android/en-US/changelogs"
-    sh "mkdir -p #{changelog_dir}"
-    File.write("#{changelog_dir}/default.txt", "Automated release at #{timestamp}")
+    # 1. Prepare Release Notes (Metadata)
+    # Generating for multiple locales to ensure coverage in Google Play
+    locales = ["en-US", "zh-CN"]
+    locales.each do |locale|
+      path = "fastlane/metadata/android/#{locale}/changelogs"
+      FileUtils.mkdir_p(path)
+      File.write("#{path}/default.txt", "Automated release at #{timestamp}")
+    end
 
-    # 2. 上传到 Google Play
+    # 2. Upload to Google Play
     upload_to_play_store(
       package_name: "com.hogan.kang.storetest",
-      # 最佳实践：直接传入 JSON 字符串内容，不依赖外部文件路径
       json_key_data: ENV['SERVICE_ACCOUNT_JSON'], 
       track: "internal",
       release_status: "draft",
       aab: "app/build/outputs/bundle/release/app-release-signed.aab",
+      
+      # Explicitly set metadata path
+      metadata_path: "fastlane/metadata",
+      
+      # Ensure only the current AAB is included in the release draft
       version_codes_to_retain: [], 
+      
+      # Enable metadata/changelog upload
+      skip_upload_metadata: false,
+      skip_upload_changelogs: false,
+      
+      # Skip images and APKs for speed
       skip_upload_apk: true,
       skip_upload_images: true,
-      skip_upload_screenshots: true,
-      skip_upload_metadata: false,
-      skip_upload_changelogs: false
+      skip_upload_screenshots: true
     )
+    
+    # 3. Optional: Cleanup generated metadata after upload
+    FileUtils.rm_rf("fastlane/metadata")
   end
 end
