@@ -5,21 +5,31 @@ platform :android do
   lane :deploy do |options|
     timestamp = Time.now.strftime("%Y-%m-%d %H:%M:%S")
     
+    # 1. 动态创建更新说明文件 (解决 release_notes 参数报错的问题)
+    # Fastlane 会自动读取 metadata 目录下的 changelogs
+    changelog_dir = "fastlane/metadata/android/en-US/changelogs"
+    sh "mkdir -p #{changelog_dir}"
+    File.write("#{changelog_dir}/default.txt", "Automated release at #{timestamp}")
+
+    # 2. 上传到 Google Play
     upload_to_play_store(
       package_name: "com.hogan.kang.storetest",
       track: "internal",
       release_status: "draft",
       aab: "app/build/outputs/bundle/release/app-release-signed.aab",
-      # 显式声明不保留旧版本，从而达到“替换”的效果
+      
+      # 核心参数：清理 App bundles 列表，只保留当前这一个
       version_codes_to_retain: [], 
       check_superseded_tracks: true,
+      
+      # 跳过不需要的素材上传
       skip_upload_apk: true,
-      skip_upload_metadata: true,
       skip_upload_images: true,
       skip_upload_screenshots: true,
-      release_notes: {
-        "en-US" => "Automated release at #{timestamp}"
-      }
+      
+      # 重要：不能跳过 metadata 和 changelogs，否则上面的文件不会生效
+      skip_upload_metadata: false,
+      skip_upload_changelogs: false
     )
   end
 end
