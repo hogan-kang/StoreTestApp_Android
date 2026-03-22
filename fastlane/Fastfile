@@ -8,8 +8,8 @@ platform :android do
     timestamp = Time.now.strftime("%Y-%m-%d %H:%M:%S")
     
     # 1. Prepare Release Notes (Metadata)
-    # Generating for multiple locales to ensure coverage in Google Play
-    locales = ["en-US", "zh-CN"]
+    # Adding zh-HK and zh-TW to ensure full Chinese locale coverage
+    locales = ["en-US", "zh-CN", "zh-HK", "zh-TW"]
     locales.each do |locale|
       path = "fastlane/metadata/android/#{locale}/changelogs"
       FileUtils.mkdir_p(path)
@@ -40,7 +40,7 @@ platform :android do
       skip_upload_screenshots: true
     )
     
-    # 3. Optional: Cleanup generated metadata after upload
+    # 3. Cleanup generated metadata after upload
     FileUtils.rm_rf("fastlane/metadata")
   end
 end
