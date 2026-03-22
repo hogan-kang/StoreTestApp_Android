@@ -1,0 +1,23 @@
+default_platform(:android)
+
+platform :android do
+  desc "Upload to Google Play Store"
+  lane :deploy do |options|
+    timestamp = Time.now.strftime("%Y-%m-%d %H:%M:%S")
+    
+    upload_to_play_store(
+      package_name: "com.hogan.kang.storetest",
+      track: "internal",
+      release_status: "draft",
+      aab: "app/build/outputs/bundle/release/app-release-signed.aab",
+      replace_draft: true, # 关键：这会清理之前的旧草稿
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_notes: {
+        "en-US" => "Automated release at #{timestamp}"
+      }
+    )
+  end
+end

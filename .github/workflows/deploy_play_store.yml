@@ -23,7 +23,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2' # Upgrade Ruby version to 3.2+
+          ruby-version: '3.2'
           bundler-cache: true
 
       - name: Install Fastlane
@@ -38,11 +38,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Build only the unsigned AAB, which is required for Play Store
+      # Build the unsigned AAB
       - name: Build Unsigned Release Bundle
         run: ./gradlew bundleRelease
       
-      # Sign only the AAB
+      # Sign the AAB (Separate step as requested)
       - name: Sign App Bundle (AAB)
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -57,28 +57,17 @@ jobs:
           name: app-release-signed-aab
           path: app/build/outputs/bundle/release/*-signed.aab
 
-      # Upload to Google Play Store using Fastlane Supply CLI (No Fastfile/Appfile needed)
+      # Upload to Google Play Store using Fastlane
       - name: Upload to Play Store with Fastlane
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
         run: |
-          # Create temporary service account file
+          # 1. Prepare Service Account file (referenced in Fastfile)
           echo "$SERVICE_ACCOUNT_JSON" > service_account.json
           
-          # Run fastlane supply directly with arguments
-          # Fixed: --status changed to --release_status
-          fastlane supply \
-            --package_name "com.hogan.kang.storetest" \
-            --json_key "service_account.json" \
-            --aab "app/build/outputs/bundle/release/app-release-signed.aab" \
-            --track "internal" \
-            --release_status "draft" \
-            --skip_upload_apk true \
-            --skip_upload_metadata true \
-            --skip_upload_images true \
-            --skip_upload_changelogs true \
-            --skip_upload_screenshots true
+          # 2. Run Fastlane deploy lane
+          fastlane android deploy
           
-          # Clean up
+          # 3. Clean up
           rm service_account.json
