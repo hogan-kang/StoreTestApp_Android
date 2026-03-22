@@ -10,7 +10,9 @@ platform :android do
       track: "internal",
       release_status: "draft",
       aab: "app/build/outputs/bundle/release/app-release-signed.aab",
-      replace_draft: true, # 关键：这会清理之前的旧草稿
+      # 显式声明不保留旧版本，从而达到“替换”的效果
+      version_codes_to_retain: [], 
+      check_superseded_tracks: true,
       skip_upload_apk: true,
       skip_upload_metadata: true,
       skip_upload_images: true,
