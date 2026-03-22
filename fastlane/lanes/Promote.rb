@@ -30,14 +30,13 @@ platform :android do
       # Automatically deactivate the version in the source track after a successful promotion
       deactivate_on_promote: true,
 
-      skip_upload_aab: true,             # Do not upload a new binary
+      skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_metadata: true,
       skip_upload_changelogs: true, 
       skip_upload_images: true,
       skip_upload_screenshots: true,
-      # Use "draft" to allow manual review before rollout
-      release_status: "draft"
+      release_status: "completed"
     )
   end
 end

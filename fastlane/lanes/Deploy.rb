@@ -22,18 +22,12 @@ platform :android do
 
     # 2. Upload to Google Play
     upload_to_play_store(
-      # package_name is automatically read from Appfile
       json_key_data: ENV['SERVICE_ACCOUNT_JSON'],
       track: "internal",
       release_status: "completed",
       aab: "app/build/outputs/bundle/release/app-release-signed.aab",
       metadata_path: metadata_base,
       version_codes_to_retain: [],
-      
-      # IMPORTANT: Keep changes in "Publishing overview" and DO NOT trigger auto-review.
-      # This prevents internal builds from pushing other track drafts into review.
-      changes_not_sent_for_review: true,
-
       skip_upload_metadata: true,
       skip_upload_changelogs: false,
       skip_upload_apk: true,
