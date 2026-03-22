@@ -1,4 +1,4 @@
-name: Build and Sign Release
+name: Deploy Google Play Internal
 
 on:
   workflow_dispatch: # Allow manual trigger

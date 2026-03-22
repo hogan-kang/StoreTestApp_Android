@@ -1,4 +1,4 @@
-name: Android CI
+name: PR Checker
 
 on:
   pull_request:
