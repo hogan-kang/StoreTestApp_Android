@@ -1,0 +1,53 @@
+name: Promote Release Track
+
+on:
+  workflow_dispatch: # 开启 UI 交互
+    inputs:
+      version_code:
+        description: '要晋升的版本号 (Version Code)'
+        required: true
+        type: string
+      from_track:
+        description: '源轨道 (Source Track)'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+          - internal
+          - alpha
+          - beta
+      to_track:
+        description: '目标轨道 (Destination Track)'
+        required: true
+        default: 'alpha'
+        type: choice
+        options:
+          - alpha
+          - beta
+          - production
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane -N
+
+      - name: Promote Release
+        env:
+          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+        run: |
+          # 使用 UI 传进来的输入值调用 fastlane
+          fastlane android promote \
+            from:${{ github.event.inputs.from_track }} \
+            to:${{ github.event.inputs.to_track }} \
+            version_code:${{ github.event.inputs.version_code }}
