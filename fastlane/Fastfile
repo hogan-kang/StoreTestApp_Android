@@ -7,13 +7,17 @@ platform :android do
   lane :deploy do |options|
     timestamp = Time.now.strftime("%Y-%m-%d %H:%M:%S")
     
-    # 1. Prepare Release Notes (Metadata)
-    # Adding zh-HK and zh-TW to ensure full Chinese locale coverage
+    # 1. Create Release Notes directly in the standard fastlane/metadata folder
+    # Use absolute path to ensure Fastlane can locate it in any environment
+    metadata_base = File.join(Dir.pwd, "fastlane", "metadata")
+    
+    # Cover all possible Chinese variants and English
     locales = ["en-US", "zh-CN", "zh-HK", "zh-TW"]
+    
     locales.each do |locale|
-      path = "fastlane/metadata/android/#{locale}/changelogs"
-      FileUtils.mkdir_p(path)
-      File.write("#{path}/default.txt", "Automated release at #{timestamp}")
+      changelog_dir = File.join(metadata_base, "android", locale, "changelogs")
+      FileUtils.mkdir_p(changelog_dir)
+      File.write(File.join(changelog_dir, "default.txt"), "Automated release at #{timestamp}")
     end
 
     # 2. Upload to Google Play
@@ -24,23 +28,20 @@ platform :android do
       release_status: "draft",
       aab: "app/build/outputs/bundle/release/app-release-signed.aab",
       
-      # Explicitly set metadata path
-      metadata_path: "fastlane/metadata",
+      # Use the standard metadata folder
+      metadata_path: metadata_base,
       
-      # Ensure only the current AAB is included in the release draft
+      # Clear the App bundles list in the release draft
       version_codes_to_retain: [], 
       
-      # Enable metadata/changelog upload
+      # Enable metadata and changelog upload
       skip_upload_metadata: false,
       skip_upload_changelogs: false,
       
-      # Skip images and APKs for speed
+      # Skip large asset uploads for speed
       skip_upload_apk: true,
       skip_upload_images: true,
       skip_upload_screenshots: true
     )
-    
-    # 3. Cleanup generated metadata after upload
-    FileUtils.rm_rf("fastlane/metadata")
   end
 end
